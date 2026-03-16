@@ -1,8 +1,8 @@
 name: Techflow Python Pipeline
 on:
   push:
-  branches:
-  - main
+    branches:
+    - main
 
 env:
   IMAGE_NAME: techflow-app
