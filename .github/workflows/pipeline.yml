@@ -1,31 +1,29 @@
 name: Techflow Python Pipeline
 on:
-push:
-branches:
-- main
+  push:
+  branches:
+  - main
 
 env:
-IMAGE_NAME: techflow-app
+  IMAGE_NAME: techflow-app
 
 jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-test:
-name: Run Tests
-runs-on: ubuntu-latest
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
 
-  - name: Setup Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.11"
-
-  - name: Install Dependencies
-    run: |
-      pip install -r requirements.txt
-      pip install pytest
-
-  - name: Run Tests
-    run: pytest test_app.py -v
+      - name: Run Tests
+        run: pytest test_app.py -v
