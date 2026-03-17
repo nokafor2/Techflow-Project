@@ -15,6 +15,14 @@ def test_hello_contains_text(client):
     response = client.get("/")
     assert b"Hello" in response.data
 
+def test_hello_contains_text(client):
+    response = client.get("/")
+    assert b"World" in response.data
+
+def test_hello_contains_text(client):
+    response = client.get("/")
+    assert b"TechFlow" in response.data
+
 def test_health_endpoint(client):
     response = client.get("/health")
     assert response.status_code == 200
