@@ -5,7 +5,7 @@ on:
     - main
 
 env:
-  IMAGE_NAME: techflow-app
+  IMAGE_NAME: ${{ vars.IMAGE_NAME }}
 
 jobs:
   test:
