@@ -69,7 +69,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:latest
+            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
             # Ensure Docker exists on the EC2 host (fix: "docker: command not found")
             if ! command -v docker >/dev/null 2>&1; then
@@ -89,21 +89,21 @@ jobs:
             sudo systemctl enable --now docker
 
             # Tag current container as previous stable
-            if [ "$(sudo docker ps -q -f name=techflow-app)" ]; then
-                sudo docker commit techflow-app ${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:previous_stable
-                sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:previous_stable
+            if [ "$(sudo docker ps -q -f name=${{ env.IMAGE_NAME }})" ]; then
+                sudo docker commit ${{ env.IMAGE_NAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:previous_stable
+                sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:previous_stable
             fi
 
             # Pull new image
             sudo docker pull $IMAGE
 
             # Stop old container
-            sudo docker stop techflow-app || true
-            sudo docker rm techflow-app || true
+            sudo docker stop ${{ env.IMAGE_NAME }} || true
+            sudo docker rm ${{ env.IMAGE_NAME }} || true
 
             # Start new container
             sudo docker run -d \
-              --name techflow-app \
+              --name ${{ env.IMAGE_NAME }} \
               -p 80:5000 \
               $IMAGE
 
