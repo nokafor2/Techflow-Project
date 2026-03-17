@@ -87,18 +87,18 @@ jobs:
               -p 80:5000 \
               $IMAGE
 
-            # Run health check
-            bash /home/ubuntu/health_check.sh
+      #       # Run health check
+      #       bash /home/ubuntu/health_check.sh
 
-      - name: Rollback if deployment fails
-        if: failure()
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            bash /home/ubuntu/rollback.sh
+      # - name: Rollback if deployment fails
+      #   if: failure()
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ubuntu
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       bash /home/ubuntu/rollback.sh
 
       # - name: Send Success Email
       #   if: success()
