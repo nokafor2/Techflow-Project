@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE="yourdockerhubusername/techflow-app:previous_stable"
+IMAGE="nokafor2/techflow-app:previous_stable"
 
 echo "Rolling back deployment..."
 
