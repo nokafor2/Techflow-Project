@@ -58,6 +58,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Deploy via SSH
         id: deploy
         uses: appleboy/ssh-action@v1.0.3
@@ -103,6 +106,26 @@ jobs:
               --name techflow-app \
               -p 80:5000 \
               $IMAGE
+
+      - name: Upload scripts/ to EC2 for testing
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "scripts/*"
+          target: "/home/ubuntu/scripts"
+          strip_components: 1
+
+      - name: Fix script permissions on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            mkdir -p /home/ubuntu/scripts
+            chmod +x /home/ubuntu/scripts/*.sh || true
 
       #       # Run health check
       #       bash /home/ubuntu/health_check.sh
