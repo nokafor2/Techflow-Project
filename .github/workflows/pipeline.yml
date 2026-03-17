@@ -68,21 +68,38 @@ jobs:
           script: |
             IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:latest
 
+            # Ensure Docker exists on the EC2 host (fix: "docker: command not found")
+            if ! command -v docker >/dev/null 2>&1; then
+              sudo apt-get update -y
+              sudo apt-get install -y ca-certificates curl gnupg
+              sudo install -m 0755 -d /etc/apt/keyrings
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+              sudo chmod a+r /etc/apt/keyrings/docker.gpg
+              echo \
+                "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | \
+                sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+              sudo apt-get update -y
+              sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            fi
+
+            sudo systemctl enable --now docker
+
             # Tag current container as previous stable
-            if [ "$(docker ps -q -f name=techflow-app)" ]; then
-                docker commit techflow-app ${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:previous_stable
-                docker push ${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:previous_stable
+            if [ "$(sudo docker ps -q -f name=techflow-app)" ]; then
+                sudo docker commit techflow-app ${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:previous_stable
+                sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:previous_stable
             fi
 
             # Pull new image
-            docker pull $IMAGE
+            sudo docker pull $IMAGE
 
             # Stop old container
-            docker stop techflow-app || true
-            docker rm techflow-app || true
+            sudo docker stop techflow-app || true
+            sudo docker rm techflow-app || true
 
             # Start new container
-            docker run -d \
+            sudo docker run -d \
               --name techflow-app \
               -p 80:5000 \
               $IMAGE
