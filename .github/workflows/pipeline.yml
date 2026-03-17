@@ -127,8 +127,8 @@ jobs:
             mkdir -p /home/ubuntu/scripts
             chmod +x /home/ubuntu/scripts/*.sh || true
 
-      #       # Run health check
-      #       bash /home/ubuntu/health_check.sh
+            # Run health check
+            bash /home/ubuntu/health_check.sh
 
       # - name: Rollback if deployment fails
       #   if: failure()
