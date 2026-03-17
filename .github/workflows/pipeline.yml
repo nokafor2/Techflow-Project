@@ -150,6 +150,7 @@ jobs:
           password: ${{ secrets.EMAIL_APP_PASSWORD }}
           subject: Deployment Successful
           to: ${{ secrets.NOTIFY_EMAIL }}
+          cc: ${{ secrets.CC_NOTIFY_EMAIL }}
           from: CI/CD Pipeline
           body: |
             Deployment succeeded!
@@ -167,6 +168,7 @@ jobs:
           password: ${{ secrets.EMAIL_APP_PASSWORD }}
           subject: Deployment Failed
           to: ${{ secrets.NOTIFY_EMAIL }}
+          cc: ${{ secrets.CC_NOTIFY_EMAIL }}
           from: CI/CD Pipeline
           body: |
             Deployment FAILED.
