@@ -9,6 +9,7 @@ on:
 
 env:
   IMAGE_NAME: ${{ vars.IMAGE_NAME }}
+  AUTHOR: Nna-ayua Okafor
 
 jobs:
   test:
@@ -160,8 +161,9 @@ jobs:
 
             Commit: ${{ github.sha }}
             Repo: ${{ github.repository }}
-            
+
             Deployed by: ${{ github.actor }}
+            Author: ${{ env.AUTHOR }}
 
       - name: Send Failure Email
         if: failure()
@@ -182,3 +184,4 @@ jobs:
             Repo: ${{ github.repository }}
 
             Deployed by: ${{ github.actor }}
+            Author: ${{ env.AUTHOR }}
