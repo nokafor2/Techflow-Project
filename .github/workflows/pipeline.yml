@@ -160,6 +160,8 @@ jobs:
 
             Commit: ${{ github.sha }}
             Repo: ${{ github.repository }}
+            
+            Deployed by: ${{ github.actor }}
 
       - name: Send Failure Email
         if: failure()
@@ -178,3 +180,5 @@ jobs:
 
             Commit: ${{ github.sha }}
             Repo: ${{ github.repository }}
+
+            Deployed by: ${{ github.actor }}
