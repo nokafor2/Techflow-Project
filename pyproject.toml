@@ -3,6 +3,7 @@
 
 [tool.bandit]
 # Skip noisy dirs; venv may not exist in CI but harmless
-exclude_dirs = [".venv", "venv", ".git", "node_modules"]
+# "scripts" = dev tooling (e.g. md→docx), not production attack surface
+exclude_dirs = [".venv", "venv", ".git", "node_modules", "scripts"]
 # test_app.py uses assert() — normal for pytest (B101)
 skips = ["B101"]

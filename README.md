@@ -277,7 +277,8 @@ python -m bandit -c pyproject.toml -r . -ll -f screen
 ```
 
 - **`requirements-dev.txt`** — app deps + Bandit (not used by the production Docker image).
-- **CI command:** `bandit -c pyproject.toml -r . -ll -f screen` (fails the job on medium+ severity findings; `B101` assert in tests is skipped).
+- **CI command:** `bandit -c pyproject.toml -r . -ll -f screen` (fails the job on medium+ severity findings; `B101` assert in tests is skipped; **`scripts/` is excluded** so dev helpers don’t block deploy).
+- If the job fails with **exit code 1** after Bandit, open the **Run Bandit** log: Bandit reports findings and exits 1 when **medium+** issues exist (not a crash—fix or skip with care in `pyproject.toml`).
 
 ---
 

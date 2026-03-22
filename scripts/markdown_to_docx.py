@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import re
 import sys
+from contextlib import suppress
 from pathlib import Path
 
 from docx import Document
@@ -17,10 +18,9 @@ from docx.shared import Pt, RGBColor
 
 def set_code_font(run) -> None:
     run.font.name = "Consolas"
-    try:
+    # Optional East Asia font variant (avoids Bandit B110 try/except/pass)
+    with suppress(AttributeError, TypeError, ValueError):
         run._element.rPr.rFonts.set(qn("w:eastAsia"), "Consolas")
-    except Exception:
-        pass
     run.font.size = Pt(9)
     run.font.color.rgb = RGBColor(0x33, 0x33, 0x33)
 
