@@ -5,5 +5,6 @@
 # Skip noisy dirs; venv may not exist in CI but harmless
 # "scripts" = dev tooling (e.g. md→docx), not production attack surface
 exclude_dirs = [".venv", "venv", ".git", "node_modules", "scripts"]
-# test_app.py uses assert() — normal for pytest (B101)
-skips = ["B101"]
+# B101: assert in pytest tests
+# B104: binding to 0.0.0.0 is required for Flask in Docker/EC2 (external traffic to the container)
+skips = ["B101", "B104"]
