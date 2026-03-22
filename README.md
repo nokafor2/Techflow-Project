@@ -19,7 +19,8 @@ This document describes the **Techflow** CI/CD project: a Flask application pack
 9. [EC2 deployment](#ec2-deployment)
 10. [Operational scripts](#operational-scripts)
 11. [Testing](#testing)
-12. [Troubleshooting](#troubleshooting)
+12. [Security (Bandit)](#security-bandit)
+13. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -68,6 +69,8 @@ Techflow-Project/
 ├── app.py                 # Flask app (challenge: do not modify)
 ├── test_app.py            # Pytest suite (challenge: do not modify)
 ├── requirements.txt       # Python dependencies
+├── requirements-dev.txt   # Dev/CI: tests + Bandit (optional local)
+├── pyproject.toml         # Bandit config [tool.bandit]
 ├── Dockerfile             # Container image definition
 ├── .gitignore
 ├── DOCUMENTATION.md       # This file
@@ -259,6 +262,22 @@ All under `scripts/`. Paths on EC2: `/home/ubuntu/scripts/`.
 
 - **Framework:** pytest + Flask test client (`test_app.py`).
 - **Coverage:** `/` returns 200 and contains expected substrings; `/health` returns JSON with `status: ok`.
+
+---
+
+## Security (Bandit)
+
+[Bandit](https://bandit.readthedocs.io/) scans Python for common security issues. This repo configures it in **`pyproject.toml`** (`[tool.bandit]`) and runs it in the **GitHub Actions `test` job** before pytest.
+
+**Run locally** (use a venv if you prefer):
+
+```bash
+pip install -r requirements-dev.txt
+python -m bandit -c pyproject.toml -r . -ll -f screen
+```
+
+- **`requirements-dev.txt`** — app deps + Bandit (not used by the production Docker image).
+- **CI command:** `bandit -c pyproject.toml -r . -ll -f screen` (fails the job on medium+ severity findings; `B101` assert in tests is skipped).
 
 ---
 

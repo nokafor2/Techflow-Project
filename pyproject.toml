@@ -1,0 +1,8 @@
+# Bandit security scanner config (https://bandit.readthedocs.io/)
+# Run: bandit -c pyproject.toml -r .
+
+[tool.bandit]
+# Skip noisy dirs; venv may not exist in CI but harmless
+exclude_dirs = [".venv", "venv", ".git", "node_modules"]
+# test_app.py uses assert() — normal for pytest (B101)
+skips = ["B101"]
